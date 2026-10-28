@@ -1,0 +1,77 @@
+<script setup>
+import { ref, watch, onMounted } from 'vue'
+import RecipeSearch from './components/RecipeSearch.vue'
+import MealPlanItem from './components/MealPlanItem.vue'
+
+const favorites = ref([])
+
+onMounted(() => {
+  const saved = localStorage.getItem('my_favorites')
+  if (saved) {
+    favorites.value = JSON.parse(saved).map((favorite) => ({
+      ...favorite,
+      instructions: favorite.instructions === 'Ingen fremgangsmåde fundet.'
+        ? 'No instructions found.'
+        : favorite.instructions
+    }))
+  }
+})
+
+watch(favorites, (newVal) => {
+  localStorage.setItem('my_favorites', JSON.stringify(newVal))
+}, { deep: true })
+
+function addFavorite(recipe) {
+  if (!favorites.value.some(f => f.id === recipe.id)) {
+    favorites.value.push(recipe)
+  }
+}
+
+function updateNote(id, newNote) {
+  const item = favorites.value.find(f => f.id === id)
+  if (item) {
+    item.note = newNote
+  }
+}
+
+function removeFavorite(id) {
+  favorites.value = favorites.value.filter(f => f.id !== id)
+}
+</script>
+
+<template>
+  <main class="container">
+    <h1>Recipes</h1>
+
+    <RecipeSearch @add-to-favorites="addFavorite" />
+
+    <hr />
+
+    <h2>My Favorites & Notes</h2>
+    <div v-if="favorites.length > 0">
+      <MealPlanItem 
+        v-for="item in favorites" 
+        :key="item.id" 
+        :item="item"
+        @remove="removeFavorite"
+        @update-note="updateNote"
+      />
+    </div>
+    <p v-else class="empty">You haven't added any favorites yet.</p>
+  </main>
+</template>
+
+<style scoped>
+.container { 
+  max-width: 800px; 
+  margin: 40px auto; 
+  background: white; 
+  padding: 30px; 
+  border-radius: 12px; 
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); 
+}
+h1 { font-size: 1.8rem; color: #0f172a; margin-bottom: 20px; text-align: center; }
+h2 { font-size: 1.3rem; color: #334155; margin-bottom: 15px; }
+hr { margin: 30px 0; border: 0; border-top: 1px solid #e2e8f0; }
+.empty { color: #64748b; font-style: italic; text-align: center; padding: 20px 0; }
+</style>
