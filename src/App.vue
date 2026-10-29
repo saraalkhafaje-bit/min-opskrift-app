@@ -3,22 +3,22 @@ import { ref, watch, onMounted } from 'vue'
 import RecipeSearch from './components/RecipeSearch.vue'
 import FavoriteItem from './components/FavoriteItem.vue'
 
-const favorites = ref([])
+const favorites = ref([]) // gør data reaktiv og holder styr på favoritterne
 
-onMounted(() => {
+onMounted(() => { // henter gemte favoritter fra localStorage ved komponentens montering. altså efter dom'en er klar
   const saved = localStorage.getItem('my_favorites')
   if (saved) {
-    favorites.value = JSON.parse(saved)
+    favorites.value = JSON.parse(saved) // konverterer den gemte JSON-streng tilbage til et JavaScript-array
   }
 })
 
-watch(favorites, (newVal) => {
-  localStorage.setItem('my_favorites', JSON.stringify(newVal))
+watch(favorites, (newVal) => { //holder øje --> localStorage
+  localStorage.setItem('my_favorites', JSON.stringify(newVal)) // gemmer de opdaterede favoritter i localStorage i tekstformat(strings)
 }, { deep: true })
 
 function addFavorite(recipe) {
   if (!favorites.value.some(f => f.id === recipe.id)) {
-    favorites.value.push(recipe)
+    favorites.value.push(recipe) //push er en array-metode, der tilføjer et element til slutningen af arrayet. vue opdager metoden fordi listen er reaktiv
   }
 }
 
@@ -51,14 +51,14 @@ function removeFavorite(id) {
     <RecipeSearch @add-to-favorites="addFavorite" />
 
     <hr />
-
-    <h2>My Favorites & Notes</h2>
-    <div v-if="favorites.length > 0">
+    <!-- My Favorites & Notes section og håndtering af ændringer i favoritterne -->
+    <h2>My Favorites &amp; Notes</h2> 
+    <div v-if="favorites.length > 0"> <!-- viser listen af favoritter, hvis der er nogen -->
       <FavoriteItem 
-        v-for="item in favorites" 
-        :key="item.id" 
-        :item="item"
-        @remove="removeFavorite"
+        v-for="item in favorites"
+        :key="item.id"
+        :item="item"      
+        @remove="removeFavorite" 
         @update-note="updateNote"
       />
     </div>
