@@ -41,7 +41,17 @@ function removeFavorite(id) {
 
 <template>
   <main class="container">
-    <h1>Recipes</h1>
+    <h1>Recipe Finder</h1>
+
+    <section class="guide" aria-labelledby="guide-title">
+      <h2 id="guide-title">Quick Guide</h2>
+      <ol>
+        <li>Search for a recipe by clicking Search or pressing Enter.</li>
+        <li>Find a recipe you like in the search results.</li>
+        <li>View the instructions or add the recipe to your favorites.</li>
+        <li>Under My Favorites &amp; Notes, add notes to your favorite recipes.</li>
+      </ol>
+    </section>
 
     <RecipeSearch @add-to-favorites="addFavorite" />
 
@@ -72,6 +82,9 @@ function removeFavorite(id) {
 }
 h1 { font-size: 1.8rem; color: #0f172a; margin-bottom: 20px; text-align: center; }
 h2 { font-size: 1.3rem; color: #334155; margin-bottom: 15px; }
+.guide { margin-bottom: 30px; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; color: #475569; }
+.guide h2 { font-size: 1rem; margin-bottom: 8px; }
+.guide ol { margin: 0; padding-left: 24px; line-height: 1.6; }
 hr { margin: 30px 0; border: 0; border-top: 1px solid #e2e8f0; }
 .empty { color: #64748b; font-style: italic; text-align: center; padding: 20px 0; }
 </style>
