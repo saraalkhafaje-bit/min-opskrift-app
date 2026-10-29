@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { searchMeals, getMealDetails } from '../services/mealService'
+import { searchMeals } from '../services/mealService'
 
 const searchQuery = ref('')
 const recipes = ref([])
@@ -16,15 +16,12 @@ function toggleInstructions(id) {
   activeRecipeId.value = activeRecipeId.value === id ? null : id
 }
 
-async function addFavorite(meal) {
-  // Fetch the full recipe from the API to include the instructions
-  const fullMeal = await getMealDetails(meal.idMeal) || meal
-
+function addFavorite(meal) {
   emit('add-to-favorites', {
     id: meal.idMeal,
     title: meal.strMeal,
     image: meal.strMealThumb,
-    instructions: fullMeal.strInstructions || 'No instructions found.',
+    instructions: meal.strInstructions || 'No instructions found.',
     note: ''
   })
 }

@@ -63,7 +63,7 @@ function deleteNote() {
       </div>
     </div>
 
-    <button class="remove-btn" @click="$emit('remove', item.id)">Remove</button>
+    <button class="remove-btn" @click="emit('remove', item.id)">Remove</button>
   </div>
 </template>
 

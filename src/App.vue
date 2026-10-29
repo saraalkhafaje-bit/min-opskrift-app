@@ -1,19 +1,14 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import RecipeSearch from './components/RecipeSearch.vue'
-import MealPlanItem from './components/MealPlanItem.vue'
+import FavoriteItem from './components/FavoriteItem.vue'
 
 const favorites = ref([])
 
 onMounted(() => {
   const saved = localStorage.getItem('my_favorites')
   if (saved) {
-    favorites.value = JSON.parse(saved).map((favorite) => ({
-      ...favorite,
-      instructions: favorite.instructions === 'Ingen fremgangsmåde fundet.'
-        ? 'No instructions found.'
-        : favorite.instructions
-    }))
+    favorites.value = JSON.parse(saved)
   }
 })
 
@@ -59,7 +54,7 @@ function removeFavorite(id) {
 
     <h2>My Favorites & Notes</h2>
     <div v-if="favorites.length > 0">
-      <MealPlanItem 
+      <FavoriteItem 
         v-for="item in favorites" 
         :key="item.id" 
         :item="item"
